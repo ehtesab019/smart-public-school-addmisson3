@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Public School Aandhar Kotta - Admission Portal</title>
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --accent-color: #3b82f6;
+            --bg-color: #f0f4f8;
+            --text-color: #333;
+            --border-color: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            padding: 10px; /* Mobile ke liye padding kam ki gayi hai */
+        }
+
+        .portal-wrapper, .admin-container, .home-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px; /* Mobile par accha dikhe isliye padding choti ki gayi hai */
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .admin-login-btn {
+            background-color: #475569;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .portal-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .school-badge {
+            width: 65px;
+            height: 65px;
+            object-fit: contain;
+            margin-bottom: 8px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            padding: 2px;
+            background: #fff;
+        }
+
+        .portal-header h1 {
+            color: var(--primary-color);
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .portal-header p {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        /* Home Welcome Screen */
+        .home-container {
+            text-align: center;
+            padding: 30px 10px;
+        }
+
+        .home-container h2 {
+            color: var(--primary-color);
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .home-container p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .admission-now-btn {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .section-block {
+            margin-bottom: 20px;
+        }
+
+        .section-block h3 {
+            color: var(--primary-color);
+            font-size: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 8px;
+        }
+
+        /* Mobile ke liye Form Grid responsive banaya gaya hai */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr; /* Mobile par ek ke niche ek aayega */
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr 1fr; /* Tablet/PC par 2 columns */
+            }
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+            color: #334155;
+            font-size: 13px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .file-upload-wrapper {
+            border: 2px dashed var(--border-color);
+            padding: 10px;
+            text-align: center;
+            border-radius: 6px;
+            background: #f8fafc;
+        }
+
+        .submit-btn {
+            background-color: #16a34a;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            width: 100%;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .back-home-btn {
+            background-color: #64748b;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* Mobile Friendly Compact Track Box */
+        .track-box {
+            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+            border: 1px solid #cbd5e1;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 25px;
+        }
+
+        .track-box h4 {
+            color: var(--primary-color);
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+
+        .track-row {
+            display: flex;
+            flex-direction: column; /* Mobile par input aur button alag line mein achhe lagte hain */
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        @media (min-width: 450px) {
+            .track-row {
+                flex-direction: row;
+            }
+        }
+
+        .track-btn {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        /* Compact Result Card */
+        #trackResultBox {
+            margin-top: 15px;
+            display: none;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .card-header {
+            padding: 10px 14px;
+            font-weight: bold;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-body {
+            background: #ffffff;
+            padding: 12px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        @media (min-width: 500px) {
+            .detail-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .detail-item {
+            background: #f8fafc;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .detail-item span {
+            display: block;
+            color: #64748b;
+            font-size: 11px;
+            margin-bottom: 1px;
+            font-weight: 600;
+        }
+
+        .detail-item strong {
+            color: #1e293b;
+            font-size: 13px;
+        }
+
+        /* Hidden Sections */
+        #formSection, #adminDashboard {
+            display: none;
+        }
+
+        #receipt-template {
+            display: none;
+        }
+
+        /* Admin Dashboard Table */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .admin-header h2 {
+            font-size: 18px;
+            color: var(--primary-color);
+        }
+
+        .clear-data-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 11px;
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto; /* Mobile par table scroll ho sakegi */
+        }
+
+        .submissions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            min-width: 600px;
+        }
+
+        .submissions-table th, .submissions-table td {
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        .submissions-table th {
+            background-color: #1e3a8a;
+            color: white;
+        }
+
+        .status-pending {
+            color: #d97706;
+            background: #fef3c7;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .status-approved {
+            color: #16a34a;
+            background: #dcfce7;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .status-rejected {
+            color: #dc2626;
+            background: #fee2e2;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .action-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .approve-btn {
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .reject-select {
+            padding: 4px;
+            font-size: 11px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 1. HOME WELCOME SCREEN -->
+<div id="homeSection" class="home-container">
+    <div class="top-bar">
+        <span></span>
+        <button type="button" class="admin-login-btn" onclick="openTeacherAdmin()">🔒 School Login</button>
+    </div>
+
+    <div class="portal-header">
+        <img src="https://cdn-icons-png.flaticon.com/512/2942/2942813.png" alt="School Logo" class="school-badge">
+        <h1>Smart Public School Aandhar Kotta</h1>
+        <p>Online Admission Portal | Session 2026-2027</p>
+    </div>
+
+    <div style="margin: 25px 0;">
+        <h2>New Admissions Open!</h2>
+        <p>Nursery se Class 3 tak ke liye online form bharein.</p>
+        <button type="button" class="admission-now-btn" onclick="openAdmissionForm()">🎓 Admission Now</button>
+    </div>
+
+    <!-- Mobile-Friendly Status Checking Box -->
+    <div class="track-box" style="text-align: left;">
+        <h4>🔍 Check Admission Status</h4>
+        <p style="font-size: 12px; color: #64748b; margin-bottom: 5px;">Apna Form No ya Registration No daal kar status check karein:</p>
+        <div class="track-row">
+            <input type="text" id="trackInputId" placeholder="Enter Form No (e.g. FM-1234)">
+            <button type="button" class="track-btn" onclick="trackApplicationStatus()">Check Status</button>
+        </div>
+        
+        <div id="trackResultBox"></div>
+    </div>
+</div>
+
+
+<!-- 2. STUDENT ADMISSION FORM SECTION -->
+<div id="formSection" class="portal-wrapper">
+    <button type="button" class="back-home-btn" onclick="goBackToHome()">← Back</button>
+
+    <div class="portal-header">
+        <img src="https://cdn-icons-png.flaticon.com/512/2942/2942813.png" alt="School Logo" class="school-badge">
+        <h1>Smart Public School Aandhar Kotta</h1>
+        <p>Admission Application Form</p>
+    </div>
+
+    <form id="admissionForm" onsubmit="processAdmissionForm(event)">
+        <!-- Section 1: Admission Details -->
+        <div class="section-block">
+            <h3>Admission Details</h3>
+            <div class="form-row">
+                <div>
+                    <label for="applyClass">Applying For Class *</label>
+                    <select id="applyClass" required>
+                        <option value="">-- Select Class --</option>
+                        <option value="Nursery">Nursery</option>
+                        <option value="LKG">LKG</option>
+                        <option value="UKG">UKG</option>
+                        <option value="Class 1">Class 1</option>
+                        <option value="Class 2">Class 2</option>
+                        <option value="Class 3">Class 3</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="academicYear">Academic Session</label>
+                    <input type="text" id="academicYear" value="2026-2027" readonly style="background-color: #f1f5f9;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Student Personal Information -->
+        <div class="section-block">
+            <h3>Student's Personal Information</h3>
+            <div class="form-row">
+                <div>
+                    <label for="firstName">First Name *</label>
+                    <input type="text" id="firstName" placeholder="First name" required>
+                </div>
+                <div>
+                    <label for="lastName">Last Name *</label>
+                    <input type="text" id="lastName" placeholder="Last name" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="dob">Date of Birth *</label>
+                    <input type="date" id="dob" required>
+                </div>
+                <div>
+                    <label for="gender">Gender *</label>
+                    <select id="gender" required>
+                        <option value="">-- Select Gender --</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="bloodGroup">Blood Group</label>
+                    <select id="bloodGroup">
+                        <option value="">-- Select --</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="studentPhoto">Upload Photograph *</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="studentPhoto" accept="image/*" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Parent/Guardian Details -->
+        <div class="section-block">
+            <h3>Parent / Guardian Details</h3>
+            <div class="form-row">
+                <div>
+                    <label for="fatherName">Father's Full Name *</label>
+                    <input type="text" id="fatherName" placeholder="Father's name" required>
+                </div>
+                <div>
+                    <label for="fatherOccupation">Father's Occupation</label>
+                    <input type="text" id="fatherOccupation" placeholder="Occupation">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="motherName">Mother's Full Name *</label>
+                    <input type="text" id="motherName" placeholder="Mother's name" required>
+                </div>
+                <div>
+                    <label for="motherOccupation">Mother's Occupation</label>
+                    <input type="text" id="motherOccupation" placeholder="Occupation">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="contactNumber">Contact Number *</label>
+                    <input type="tel" id="contactNumber" placeholder="10-digit mobile" pattern="[0-9]{10}" required>
+                </div>
+                <div>
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="email@example.com">
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Address Details -->
+        <div class="section-block">
+            <h3>Residential Address</h3>
+            <div class="form-group">
+                <label for="address">Street Address *</label>
+                <textarea id="address" rows="2" placeholder="House No, Street, Locality" required></textarea>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label for="city">City / District *</label>
+                    <input type="text" id="city" placeholder="City" required>
+                </div>
+                <div>
+                    <label for="pincode">Pincode *</label>
+                    <input type="text" id="pincode" placeholder="6-digit pincode" pattern="[0-9]{6}" required>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit & Print Receipt</button>
+    </form>
+</div>
+
+
+<!-- 3. SCHOOL LOGIN / ADMIN DASHBOARD SECTION -->
+<div id="adminDashboard" class="admin-container">
+    <div class="admin-header">
+        <h2>School Admin Portal</h2>
+        <button type="button" class="back-home-btn" onclick="closeTeacherAdmin()">← Back</button>
+    </div>
+    
+    <p style="color: #64748b; font-size: 12px; margin-bottom: 12px;">Students applications ko Approve ya Deny (Reason ke sath) karein:</p>
+    
+    <div class="table-responsive">
+        <table class="submissions-table">
+            <thead>
+                <tr>
+                    <th>Reg / Form No</th>
+                    <th>Student Name</th>
+                    <th>Class</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Action / Reason</th>
+                </tr>
+            </thead>
+            <tbody id="submissionsTableBody">
+                <!-- Dynamic Data -->
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 20px; text-align: right;">
+        <button type="button" class="clear-data-btn" onclick="clearAllSubmissions()">Clear All Data</button>
+    </div>
+</div>
+
+
+<!-- Print Template -->
+<div id="receipt-template">
+    <div class="receipt-header">
+        <h2>SMART PUBLIC SCHOOL AANDHAR KOTTA</h2>
+        <p>Official Admission Application Receipt</p>
+    </div>
+
+    <div class="receipt-meta">
+        <div>Registration No: <span id="lblRegNo"></span></div>
+        <div>Form No: <span id="lblFormNo"></span></div>
+        <div>Date: <span id="lblDate"></span></div>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+        <tr>
+            <th style="border:1px solid #ccc; padding:6px; text-align:left; background:#f1f5f9;">Applied Class</th>
+            <td style="border:1px solid #ccc; padding:6px;" id="lblClass"></td>
+        </tr>
+        <tr>
+            <th style="border:1px solid #ccc; padding:6px; text-align:left; background:#f1f5f9;">Student's Name</th>
+            <td style="border:1px solid #ccc; padding:6px;" id="lblStudentName"></td>
+        </tr>
+        <tr>
+            <th style="border:1px solid #ccc; padding:6px; text-align:left; background:#f1f5f9;">Date of Birth</th>
+            <td style="border:1px solid #ccc; padding:6px;" id="lblDob"></td>
+        </tr>
+        <tr>
+            <th style="border:1px solid #ccc; padding:6px; text-align:left; background:#f1f5f9;">Gender</th>
+            <td style="border:1px solid #ccc; padding:6px;" id="lblGender"></td>
+        </tr>
+        <tr>
+            <th style="border:1px solid #ccc; padding:6px; text-align:left; background:#f1f5f9;">Father's Name</th>
+            <td style="border:1px solid #ccc; padding:6px;" id="lblFatherName"></td>
+        </tr>
+        <tr>
+            <th style="border:1px solid #ccc; padding:6px; text-align:left; background:#f1f5f9;">Mother's Name</th>
+            <td style="border:1px solid #ccc; padding:6px;" id="lblMotherName"></td>
+        </tr>
+        <tr>
+            <th style="border:1px solid #ccc; padding:6px; text-align:left; background:#f1f5f9;">Contact Number</th>
+            <td style="border:1px solid #ccc; padding:6px;" id="lblContact"></td>
+        </tr>
+        <tr>
+            <th style="border:1px solid #ccc; padding:6px; text-align:left; background:#f1f5f9;">Residential Address</th>
+            <td style="border:1px solid #ccc; padding:6px;" id="lblAddressText"></td>
+        </tr>
+    </table>
+
+    <div style="text-align: center; font-size: 11px; color: #64748b; border-top: 1px solid #ccc; padding-top: 10px;">
+        <p>Computer-generated admission receipt. Keep safe for reference.</p>
+        <p>Smart Public School Aandhar Kotta | Contact: +91-XXXXXXXXXX</p>
+    </div>
+</div>
+
+<script>
+    const TEACHER_PASSWORD = "teacher123";
+
+    function openAdmissionForm() {
+        document.getElementById('homeSection').style.display = 'none';
+        document.getElementById('formSection').style.display = 'block';
+    }
+
+    function goBackToHome() {
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('homeSection').style.display = 'block';
+    }
+
+    function processAdmissionForm(event) {
+        event.preventDefault();
+
+        const uniqueId = Math.floor(100000 + Math.random() * 900000);
+        const regNo = "SPS-AK-2026-" + uniqueId;
+        const formNo = "FM-" + Math.floor(1000 + Math.random() * 9000);
+        const currentDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+        const studentData = {
+            regNo: regNo,
+            formNo: formNo,
+            date: currentDate,
+            applyClass: document.getElementById('applyClass').value,
+            studentName: document.getElementById('firstName').value + " " + document.getElementById('lastName').value,
+            dob: document.getElementById('dob').value,
+            gender: document.getElementById('gender').value,
+            fatherName: document.getElementById('fatherName').value,
+            motherName: document.getElementById('motherName').value,
+            contact: document.getElementById('contactNumber').value,
+            address: document.getElementById('address').value + ", " + document.getElementById('city').value + " - " + document.getElementById('pincode').value,
+            status: "Pending",
+            reason: ""
+        };
+
+        let submissions = JSON.parse(localStorage.getItem('schoolAdmissions')) || [];
+        submissions.push(studentData);
+        localStorage.setItem('schoolAdmissions', JSON.stringify(submissions));
+
+        document.getElementById('lblRegNo').innerText = studentData.regNo;
+        document.getElementById('lblFormNo').innerText = studentData.formNo;
+        document.getElementById('lblDate').innerText = studentData.date;
+        document.getElementById('lblClass').innerText = studentData.applyClass;
+        document.getElementById('lblStudentName').innerText = studentData.studentName;
+        document.getElementById('lblDob').innerText = studentData.dob;
+        document.getElementById('lblGender').innerText = studentData.gender;
+        document.getElementById('lblFatherName').innerText = studentData.fatherName;
+        document.getElementById('lblMotherName').innerText = studentData.motherName;
+        document.getElementById('lblContact').innerText = studentData.contact;
+        document.getElementById('lblAddressText').innerText = studentData.address;
+
+        alert(`Form Submitted Successfully!\nYour Form No is: ${formNo}\nPlease save this number to track your admission status.`);
+        
+        window.print();
+        document.getElementById('admissionForm').reset();
+        goBackToHome();
+    }
+
+    // Mobile-Friendly Status Tracking with Reason Support
+    function trackApplicationStatus() {
+        const query = document.getElementById('trackInputId').value.trim();
+        const resultBox = document.getElementById('trackResultBox');
+
+        if (!query) {
+            alert("Please enter a valid Form No or Registration No.");
+            return;
+        }
+
+        let submissions = JSON.parse(localStorage.getItem('schoolAdmissions')) || [];
+        let found = submissions.find(item => item.formNo.toLowerCase() === query.toLowerCase() || item.regNo.toLowerCase() === query.toLowerCase());
+
+        resultBox.style.display = 'block';
+
+        if (found) {
+            let headerBg, headerColor, statusText;
+
+            if (found.status === "Approved") {
+                headerBg = "#dcfce7";
+                headerColor = "#15803d";
+                statusText = "✅ APPROVED BY SCHOOL";
+            } else if (found.status === "Rejected") {
+                headerBg = "#fee2e2";
+                headerColor = "#dc2626";
+                statusText = "❌ DENIED / REJECTED";
+            } else {
+                headerBg = "#fef3c7";
+                headerColor = "#b45309";
+                statusText = "⏳ PENDING (UNDER REVIEW)";
+            }
+
+            let reasonHtml = "";
+            if (found.status === "Rejected" && found.reason) {
+                reasonHtml = `<div style="margin-top: 10px; background: #fee2e2; padding: 8px; border-radius: 6px; color: #b91c1c; font-size: 12px;"><strong>Reason for Denial:</strong> ${found.reason}</div>`;
+            }
+
+            resultBox.innerHTML = `
+                <div class="card-header" style="background-color: ${headerBg}; color: ${headerColor};">
+                    <span>${statusText}</span>
+                    <span style="font-size: 11px; background: #fff; padding: 2px 6px; border-radius: 4px; border: 1px solid ${headerColor};">${found.date}</span>
+                </div>
+                <div class="card-body">
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span>Form Number</span>
+                            <strong>${found.formNo}</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>Student Name</span>
+                            <strong>${found.studentName}</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>Father's Name</span>
+                            <strong>${found.fatherName}</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>Applied Class</span>
+                            <strong>${found.applyClass}</strong>
+                        </div>
+                    </div>
+                    ${reasonHtml}
+                </div>
+            `;
+        } else {
+            resultBox.innerHTML = `
+                <div class="card-header" style="background-color: #fee2e2; color: #b91c1c;">
+                    <span>❌ NO RECORD FOUND</span>
+                </div>
+                <div class="card-body" style="text-align: center; color: #b91c1c; font-size: 12px; padding: 12px;">
+                    No application found matching ID: "${query}".
+                </div>
+            `;
+        }
+    }
+
+    function openTeacherAdmin() {
+        const passwordInput = prompt("Enter School Admin Password:");
+        if (passwordInput === null) return;
+
+        if (passwordInput === TEACHER_PASSWORD) {
+            document.getElementById('homeSection').style.display = 'none';
+            document.getElementById('adminDashboard').style.display = 'block';
+            loadSubmissionsTable();
+        } else {
+            alert("Incorrect Password!");
+        }
+    }
+
+    function closeTeacherAdmin() {
+        document.getElementById('adminDashboard').style.display = 'none';
+        document.getElementById('homeSection').style.display = 'block';
+    }
+
+    function loadSubmissionsTable() {
+        const tableBody = document.getElementById('submissionsTableBody');
+        tableBody.innerHTML = '';
+
+        let submissions = JSON.parse(localStorage.getItem('schoolAdmissions')) || [];
+
+        if (submissions.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #64748b;">No submissions found.</td></tr>';
+            return;
+        }
+
+        submissions.forEach((item, index) => {
+            const row = document.createElement('tr');
+            
+            let statusBadge = "";
+            if (item.status === "Approved") {
+                statusBadge = `<span class="status-approved">Approved</span>`;
+            } else if (item.status === "Rejected") {
+                statusBadge = `<span class="status-rejected">Rejected</span>`;
+            } else {
+                statusBadge = `<span class="status-pending">Pending</span>`;
+            }
+
+            row.innerHTML = `
+                <td><b>${item.formNo}</b><br><small>${item.regNo}</small></td>
+                <td>${item.studentName}</td>
+                <td>${item.applyClass}</td>
+                <td>${item.contact}</td>
+                <td>${statusBadge}</td>
+                <td>
+                    <div class="action-cell">
+                        <button class="approve-btn" onclick="updateStatus(${index}, 'Approved', '')">Approve</button>
+                        <select class="reject-select" id="reason_${index}" onchange="rejectWithReason(${index})">
+                            <option value="">-- Deny / Reject Reason --</option>
+                            <option value="Document Missing / Incomplete">Document Missing</option>
+                            <option value="Wrong Address / Incorrect Details">Wrong Address / Details</option>
+                            <option value="Incorrect Date of Birth / Class">Incorrect DOB / Class</option>
+                            <option value="Other Technical Error">Other Reason</option>
+                        </select>
+                    </div>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function updateStatus(index, newStatus, reasonText) {
+        let submissions = JSON.parse(localStorage.getItem('schoolAdmissions')) || [];
+        submissions[index].status = newStatus;
+        submissions[index].reason = reasonText;
+        localStorage.setItem('schoolAdmissions', JSON.stringify(submissions));
+        loadSubmissionsTable();
+        alert(`Application marked as ${newStatus}!`);
+    }
+
+    function rejectWithReason(index) {
+        const selectElement = document.getElementById(`reason_${index}`);
+        const selectedReason = selectElement.value;
+        if (selectedReason) {
+            updateStatus(index, 'Rejected', selectedReason);
+        }
+    }
+
+    function clearAllSubmissions() {
+        if (confirm("Delete all submissions?")) {
+            localStorage.removeItem('schoolAdmissions');
+            loadSubmissionsTable();
+            alert("Cleared successfully.");
+        }
+    }
+</script>
+
+</body>
+</html>
